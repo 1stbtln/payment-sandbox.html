@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payment</title>
-  <script type="text/javascript" src="https://web.squarecdn.com/v1/square.js"></script>  <style>
+  <title>Payment - Sandbox Mode</title>
+  <script type="text/javascript" src="https://web.squarecdn.com/v1/square.js"></script>
+  <style>
     .sq-message-text,
     .sq-message-icon {
       display: none !important;
@@ -27,6 +28,18 @@
     .container {
       padding: 0;
       width: 100%;
+    }
+    
+    .sandbox-indicator {
+      background: linear-gradient(135deg, #ffc107, #ff9800);
+      color: #333;
+      padding: 8px 12px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      border: 2px solid #f57c00;
     }
     
     .card-container {
@@ -75,84 +88,81 @@
       color: white;
       border: none;
       border-radius: 8px;
-      background: linear-gradient(to right, #ff4500, #b30000);
+      background: linear-gradient(135deg, #ff6b35, #b30000);
       cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      transition: all 0.3s ease;
     }
     
     #submit-button:hover {
-      opacity: 0.9;
-    }
-    
-    #submit-button:active {
-      opacity: 0.8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(179, 0, 0, 0.3);
     }
     
     #submit-button:disabled {
-      opacity: 0.6;
-      background: #999;
+      background: #ccc;
       cursor: not-allowed;
-    }
-    
-    #status {
-      margin-top: 10px;
-      margin-bottom: 70px;
-      padding: 10px;
-      border-radius: 6px;
-      color: #d32f2f;
-      background-color: #ffebee;
-      font-size: 14px;
-      text-align: center;
-      display: none;
-    }
-    
-    #status.visible {
-      display: block;
+      transform: none;
+      box-shadow: none;
     }
     
     .spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-      border: 3px solid rgba(255,255,255,0.3);
+      border: 2px solid #ffffff;
+      border-top: 2px solid transparent;
       border-radius: 50%;
-      border-top-color: white;
+      width: 16px;
+      height: 16px;
       animation: spin 1s linear infinite;
+      display: none;
+      margin-right: 8px;
     }
     
     @keyframes spin {
-      to {transform: rotate(360deg);}
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     
-    @media (max-width: 400px) {
-      #submit-button {
-        font-size: 16px;
-        padding: 14px;
-      }
+    .button-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .status {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+    }
+    
+    .status.visible {
+      display: block;
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="sandbox-indicator">
+      🧪 SANDBOX MODE - Test payments only
+    </div>
+    
     <div id="card-container" class="card-container"></div>
-    <div id="status"></div>
-  </div>
-  
-  <div class="button-container">
-    <button id="submit-button" disabled>
-      <div class="spinner" id="spinner" style="display:none;"></div>
-      <span id="button-text">Pay</span>
-    </button>
+    
+    <div class="button-container">
+      <button id="submit-button" disabled>
+        <div class="button-content">
+          <div id="spinner" class="spinner"></div>
+          <span id="button-text">Loading...</span>
+        </div>
+      </button>
+      <div id="status" class="status"></div>
+    </div>
   </div>
 
   <script>
     async function main() {
-      const appId = 'sq0idp-MxctQ0AUlqhwNNx1Icvfhw';
-      const locationId = 'L3D90HN4FDZED';
+      // SANDBOX Square App ID and Location ID - You'll need to replace these with your actual sandbox credentials
+      const appId = 'sq0idp-SANDBOX_APP_ID_HERE';
+      const locationId = 'SANDBOX_LOCATION_ID_HERE';
       
       const submitButton = document.getElementById('submit-button');
       const statusDiv = document.getElementById('status');
@@ -160,7 +170,7 @@
       const buttonText = document.getElementById('button-text');
       const cardContainer = document.getElementById('card-container');
       
-      console.log('Initializing Square.payments with', appId, locationId);
+      console.log('Initializing Square.payments (SANDBOX) with', appId, locationId);
       
       if (!window.Square) {
         showError('Square payment SDK failed to load');
@@ -182,7 +192,8 @@
           }));
         }
       }
-        try {
+      
+      try {
         const payments = window.Square.payments(appId, locationId);
         
         const card = await payments.card();
@@ -190,7 +201,7 @@
         await card.attach('#card-container');
         
         submitButton.disabled = false;
-        buttonText.textContent = `Pay`;
+        buttonText.textContent = `Pay (Test Mode)`;
         
         card.addEventListener('change', event => {
           if (event.complete) {
