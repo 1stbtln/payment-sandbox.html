@@ -6,12 +6,12 @@
   <meta http-equiv="Content-Security-Policy"
         content="
           default-src   'self';
-          script-src    https://sandbox.web.squarecdn.com https://web.squarecdn.com 'unsafe-inline';
-          style-src     'unsafe-inline' https://sandbox.web.squarecdn.com https://web.squarecdn.com;
-          font-src      https://sandbox.web.squarecdn.com https://web.squarecdn.com;
-          connect-src   https://connect.squareupsandbox.com https://pci-connect.squareupsandbox.com https://o160250.ingest.sentry.io;
-          frame-src     https://sandbox.web.squarecdn.com;
-          img-src       data: https:;
+          script-src    'self' https://sandbox.web.squarecdn.com https://web.squarecdn.com 'unsafe-inline';
+          style-src     'self' 'unsafe-inline' https://sandbox.web.squarecdn.com https://web.squarecdn.com;
+          font-src      'self' https://sandbox.web.squarecdn.com https://square-fonts-production-f.squarecdn.com https://d1g145x70srn7h.cloudfront.net;
+          connect-src   'self' https://connect.squareupsandbox.com https://pci-connect.squareupsandbox.com https://o160250.ingest.sentry.io;
+          frame-src     'self' https://sandbox.web.squarecdn.com;
+          img-src       'self' data:;
         " />
   <title>Payment - Sandbox Mode</title>
    <script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
